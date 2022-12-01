@@ -1,0 +1,72 @@
+    /** test */
+    public function getCreatePost()
+    {
+        Storage::fake('avatars');
+        $this->seed();
+
+        $data = [
+            'name' => $this->faker->name(),
+            'price' => $this->randomNumber(4),
+        ];
+
+        return $data;
+    }
+    /** @test */
+    public function delete_product()
+    {
+        $product = Product::factory()->count(1)->make();
+        $product = Product::first();
+
+        //if ($product) {
+        //    $product->delete();
+        //}
+        $this->delete(route('product.destroy', $product->id));
+
+        $this->assertTrue(true);
+    }
+
+
+    /** @test */
+    public function name_must_be_required()
+    {
+        $this->post(route('product.store'), [
+            'name' => 'name',
+        ])->assertSessionHasErrors([
+            'name' => 'The name field is required',
+        ]);
+    }
+
+     /** @test */
+     public function price_must_be_required()
+     {
+         $this->post(route('product.store'), [
+             'price' => '',
+         ])->assertSessionHasErrors([
+             'price' => 'The price field is required',
+         ]);
+     }
+ 
+     /** @test */
+     public function price_must_be_integer()
+     {
+         $this->post(route('product.store'), [
+             'price' => 'price',
+         ])->assertSessionHasErrors([
+             'price' => 'The price must be integer',
+         ]);
+     }
+
+
+    /** @test */
+    public function delete_product()
+    {
+        $product = Product::factory()->count(1)->make();
+
+        $product = Product::first();
+
+        if($product) {
+            $product->delete();
+        }
+
+        $this->assertTrue(true);
+    }

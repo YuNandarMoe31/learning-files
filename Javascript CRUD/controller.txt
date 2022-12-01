@@ -1,0 +1,51 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Models\Industry;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\IndustryStoreRequest;
+use App\Http\Requests\Admin\IndustryUpdateRequest;
+
+class IndustryController extends Controller
+{
+    public function index(Request $request)
+    {
+        $industries =  Industry::all();
+
+        return view('admin.industry.index', compact('industries'));
+    }
+
+    public function store(IndustryStoreRequest $request)
+    {
+        $industry = new Industry();
+        $industry->name = $request->name;
+        $industry->save();
+
+        return response()->json($industry, 200);
+    }
+
+    public function show($id)
+    {
+        $industry = Industry::findOrfail($id);
+        return response()->json($industry, 200);
+    }
+
+    public function update(IndustryUpdateRequest $request, $id)
+    {
+        $industry = Industry::findOrfail($id);
+        $industry->name = $request->name;
+        $industry->update();
+
+        return response()->json($industry, 200);
+    }
+
+    public function destroy($id)
+    {
+        $industry = Industry::findOrfail($id);
+        $industry->delete();
+
+        return response()->json(['data' => $industry], 200);
+    }
+}

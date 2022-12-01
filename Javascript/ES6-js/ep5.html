@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ep5 Spread</title>
+</head>
+<body>
+  <script>
+//    var male = ["Mg Mg", "Aung Aung"];
+//    var female = ["Aye Aye", "Mya Mya"];
+//    var people = [...male, ...female];
+//
+//    console.log(people); // 2ku paung p 1ku pl lo chin loh spread nae phyat cha lite tr
+
+    var users = [
+      { name: "Mg Mg", email: "mgmg@gmail.com" },
+      { name: "Aung Aung", email: "aungaung@gmail.com" }
+    ];
+
+    var newUser = { name: "Tun Tun", email: "tuntun@gmail.com" };
+
+    users = [...users, newUser]; // 2st way (user new htet add tae akhr use tr)
+
+    // users.push(newUser); // 1st way
+    
+    console.log(users);
+    
+//    ... (spread) (array ko string pone san)
+//object, array 2ku ko merger lote
+//object, array value twy ko phyat cha tae akhr use tl
+
+    //object
+    var user = { name: "Mg Mg", email: "mgmg@gamil.com" };
+    var user2 = { name: "Mg Mg", email: "mgmg2@gamil.com" };
+
+    var person = {...user, ...user2};
+
+    console.log(person);
+  </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ES6 Feature Ep3</title>
+</head>
+<body>
+  <script>
+    // var, let, const
+
+    // var --> global variable; (can use everywhere)
+    // let --> scope variabel (if htl mhr pl use tr)
+    // const --> constant variable (value change loh ma ya buu)
+
+    var message = 'Hello World';
+
+    if(true) {
+      var message = "Hello JS";
+      // console.log(message);
+    }
+
+    // console.log(message);
+    // function today() {
+    //   return new Date();
+    // }
+
+    const today = function() {
+      return new Date();
+    }
+
+    // const PI = 3.14;
+
+    // today = "Today is not tomorrow.";
+
+    console.log(today);
+
+  </script>
+</body>
+</html>

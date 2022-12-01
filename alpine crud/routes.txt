@@ -1,0 +1,6 @@
+    //industry
+    Route::get('/admin/industry', [IndustryController::class, 'index'])->name('admin.industry.index');
+    Route::post('/admin/industry', [IndustryController::class, 'store'])->name('admin.industry.store');
+    Route::get('/admin/industry{id}', [IndustryController::class, 'show'])->name('admin.industry.show');
+    Route::post('/admin/industry/{id}', [IndustryController::class, 'update'])->name('admin.industry.update');
+    Route::delete('/admin/industry/{id}', [IndustryController::class, 'destroy'])->name('admin.industry.delete');

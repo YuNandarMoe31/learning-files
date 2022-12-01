@@ -1,0 +1,1 @@
+Frontend, backendd combine --> Inertia Js

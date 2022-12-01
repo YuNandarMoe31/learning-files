@@ -1,0 +1,192 @@
+@extends('admin.layouts.app')
+
+@section('title', '業種登録')
+
+@section('contents')
+<!-- Industry Type Registration Start -->
+<div class="container-lg px-3 pb-4 mt-5" x-data="industryCrud">
+    <h3 class="text-center text-[24px] fw-bold text-primary">業種登録</h3>
+    <div class="card p-lg-5 p-4 mt-5 border-white">
+        <!-- Industry Type Table Start -->
+        <div class="table-responsive">
+            <table class="table border-white text-center text-[16px]">
+                <thead class="bg-info text-white">
+                    <tr>
+                        <th>NO</th>
+                        <th>名称</th>
+                        <th>更新日</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($industries as $industry)
+                    <tr>
+                        <td>{{ $industry->id }}</td>
+                        <td>{{ $industry->name }}</td>
+                        <td>{{ $industry->created_at->format('Y-m-d') }}</td>
+                        <td>
+                            <button class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#editModal" @click="editData({{ $industry }})">編集</button>
+                            <button class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#notDisplayModal" @click="deleteData({{ $industry->id }})">非表示</button>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-primary d-flex justify-content-center mx-auto mb-3"
+                data-bs-toggle="modal" data-bs-target="#additionalModal" @click="create">追加</button>
+        </div>
+        <!-- Industry Type Table End -->
+
+        <!-- Edit Modal Start -->
+        <div class="modal fade" id="editModal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header border-0">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <form @submit.prevent="updateData">
+                        <div class="modal-body">
+                            <div class="mb-3 row">
+                                <label for="name" class="col-12 col-md-5 col-form-label">名称</label>
+                                <div class="col-12 col-md-7">
+                                    <input x-model="form.name" type="text" class="form-control" id="name">
+                                    <template x-if="errors.name">
+                                        <p x-text="errors.name" class="text-danger text-[16px]"></p>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-between col-md-12 mx-auto px-3">
+                            <button type="button" class="btn btn-secondary opacity-75 px-4 col-lg-5 col-md-6 col-sm-12 mb-3 rounded-pill"
+                                data-bs-dismiss="modal">キャンセル</button>
+                            <button type="submit" class="btn btn-primary px-5 col-lg-5 col-md-6 col-sm-12 mb-3 rounded-pill">編集</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Edit Modal End -->
+
+        <!-- Not Display Modal Start -->
+        <div class="modal fade" id="notDisplayModal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-center text-primary">非表示にしてもよろしいですか？</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <form @submit.prevent="destroy">
+                        <div class="row justify-content-between col-md-12 mx-auto p-3">
+                            <button type="button" class="btn btn-secondary opacity-75 px-4 col-lg-5 col-md-6 col-sm-12 mb-3 rounded-pill"
+                                data-bs-dismiss="modal">キャンセル</button>
+                            <button type="submit" class="btn btn-primary px-5 col-lg-5 col-md-6 col-sm-12 mb-3 rounded-pill">OK</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Not Display Modal End -->
+
+        <!-- Additional Modal Start -->
+        <div class="modal fade" id="additionalModal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header border-0">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <form @submit.prevent="saveData">
+                        <div class="modal-body">
+                            <div class="mb-3 row">
+                                <label for="name" class="col-12 col-md-5 col-form-label">名称</label>
+                                <div class="col-12 col-md-7">
+                                    <input x-model="form.name" type="text" class="form-control" id="name" value="">
+                                    <template x-if="errors.name">
+                                        <p x-text="errors.name" class="text-danger text-[16px]"></p>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-between col-md-12 mx-auto px-3">
+                            <button type="button" class="btn btn-secondary opacity-75 px-4 col-lg-5 col-md-6 col-sm-12 mb-3 rounded-pill"
+                                data-bs-dismiss="modal">キャンセル</button>
+                            <button type="submit" class="btn btn-primary px-5 col-lg-5 col-md-6 col-sm-12 mb-3 rounded-pill">追加</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Additional Modal End -->
+    </div>
+</div>
+<!-- Industry Type Registration End -->
+
+@endsection
+
+@section('scripts')
+<script>
+    function industryCrud() {
+        return {
+            industries: [],
+            form: {
+                id: '',
+                name: '',
+            },
+            errors: {},
+            create() {
+                this.errors = {};
+                this.form.name = '';
+            },
+            saveData() {
+                this.errors = {};
+                axios.post('/admin/industry', this.form)
+                .then(response => {
+                    this.form.name = '';
+                    location.reload();              
+                }).catch(error => {
+                    if (error.response) {
+                        let errors = error.response.data.errors;
+                        for (let key in errors) {
+                            this.errors[key] = errors[key][0]
+                        }
+                    }
+                });
+            },     
+            editData(industry) {   
+                this.errors = {};
+                this.form.id = industry.id;
+                this.form.name = industry.name;        
+            },
+            updateData() {
+                this.errors = {};
+                axios.post(`/admin/industry/${this.form.id}`, this.form)
+                .then(response => {
+                    this.form.name = '';
+                    location.reload();     
+                }).catch(error => {
+                    if (error.response) {
+                        let errors = error.response.data.errors;
+                        for (let key in errors) {
+                            this.errors[key] = errors[key][0]
+                        }
+                    }
+                });
+            },
+            deleteData(id) {
+                this.form.id = id;
+            },  
+            destroy() {
+                axios.delete(`/admin/industry/${this.form.id}`)
+                .then(response => {
+                    this.form.name = '';
+                    location.reload();     
+                });
+            },
+        }
+    }
+</script>
+@endsection
